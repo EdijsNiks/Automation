@@ -1,7 +1,10 @@
 
 import LoginPage from "../../pageObjects/Login.page";
 import HomePage from "../../pageObjects/Home.page";
-import BasePage from "../../pageObjects/Base.page";
+import CartsPage from "../../pageObjects/Carts.page";
+import CheckOutStepOne from "../../pageObjects/CheckoutStepOne.page";
+import CheckOutStepTwo from "../../pageObjects/CheckoutStepTwo.page";
+import CheckoutComplete from "../../pageObjects/CheckoutComplete.page";
 
 describe('Saucedemo', () => {
     beforeEach(() => {
@@ -72,18 +75,28 @@ describe('Saucedemo', () => {
         //Log in
         LoginPage.logIn("standard_user","secret_sauce");
         //Add to cart "Sauce Labs Backpack" and "Sauce Labs Bolt T-Shirt"
-
+        HomePage.addToCartBack.click();
+        HomePage.addToCartTShirt.click();
         //Open Cart
+        HomePage.clickOnCart.click();
         //Create cart (Create CartsPage object)
-        //Validate that we see items
+        //Validate that we see items 
+        CartsPage.checkIfCartHasList.should("have.length", 2);
         //Validate that there are 2 items in cart
+        CartsPage.cartCount.should("have.text", 2);
         //Click checkout (Create new page object - CheckOutStepOne)
+        CartsPage.checkOutStepOne.click();
         //Set firstname. lastname, zip code
+        CheckOutStepOne.checkoutInfo("Jeff", "Gusta", "3421")
         // Click Continue
+        CheckOutStepOne.pressContinue.click();
         //(Create step 2 page object) validate that we see "49.66"
+        CheckOutStepTwo.totalSum.should("have.text", "Total: $49.66");
         //Click Finish
+        CheckOutStepTwo.pressFinish.click();
         //(Create Checkout Complete page object) validate that we see "Thank you for your order!"
-        
+        CheckoutComplete.validateCheckOutText.should('have.text', 'Thank you for your order!')
+
 
     })
 });
